@@ -31,6 +31,8 @@ import {Provider as MovieProvider} from './src/context/MovieContext';
 import PaymentSuccessScreen from './src/screens/PaymentSuccessScreen';
 
 const Stack = createStackNavigator();
+LogBox.ignoreAllLogs(disable)
+
 
 // const switchNavigator = createStackNavigator({
 //   MovieList: MovieListScreen,

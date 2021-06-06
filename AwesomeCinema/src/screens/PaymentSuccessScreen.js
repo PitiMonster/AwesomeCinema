@@ -12,6 +12,7 @@ import {Context as AuthContext} from '../context/AuthContext';
 
 import * as Constants from '../constants';
 
+// ekran wyświetlany gdy użytkownik zakupi bilet
 const PaymentSuccessScreen = ({navigation}) => {
   const {toMovieList, clearData} = useContext(MovieContext);
   const {logout} = useContext(AuthContext);

@@ -9,6 +9,7 @@ import {
 
 import * as Constants from '../constants';
 
+// komponent, który wskazuje na ładowanie danych w trakcie działania ekranu
 const LoadingIndicator = ({isLoading}) => {
   const width = useWindowDimensions().width;
   const height = useWindowDimensions().height;

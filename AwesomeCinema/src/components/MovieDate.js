@@ -4,6 +4,7 @@ import {COLORS} from '../constants';
 
 import {navigate} from '../helpers/navigationRef';
 
+// komponent będący elementem listy z temrinarzem grania filmu
 const MovieDate = ({item}) => {
   const generateHours = hours =>
     hours.map((hour, index) => (

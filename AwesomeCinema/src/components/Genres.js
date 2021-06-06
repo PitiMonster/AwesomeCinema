@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
+// komponent wyświetlający gatunki filmów
 export default function Genres({genres, fontSize}) {
   return (
     <View style={styles.genres}>

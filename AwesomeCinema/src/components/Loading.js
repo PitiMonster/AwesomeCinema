@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 
+// komponent używany do wskazania ładowania danych gdy zmianiane ekrany
 const Loading = () => (
   <View style={styles.loadingContainer}>
     <ActivityIndicator size="large" color="#ff2f00" />

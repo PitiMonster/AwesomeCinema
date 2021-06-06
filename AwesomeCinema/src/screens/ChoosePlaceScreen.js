@@ -7,6 +7,7 @@ import Loading from '../components/Loading';
 
 import Sit from '../components/Sit';
 
+// ekran pozwalający na zarezerwowanie biletu
 const ChoosePlaceScreen = ({route, navigation}) => {
   const {state, getScreening, getHall, getFreeTickets, buyTicket} =
     useContext(MovieContext);
@@ -28,9 +29,13 @@ const ChoosePlaceScreen = ({route, navigation}) => {
       getFreeTickets(state.currScreening.id);
     };
 
+    // pobieranie danych po kolei
     if (!state.currScreening) {
       fetchData();
-    } else if (!state.currHall && state.freeTickets.length === 0 || !screening) {
+    } else if (
+      (!state.currHall && state.freeTickets.length === 0) ||
+      !screening
+    ) {
       setScreening(state.currScreening);
       fetchAddData();
     } else {
@@ -39,19 +44,23 @@ const ChoosePlaceScreen = ({route, navigation}) => {
     }
   }, [state.currScreening, state.currHall, state.freeTickets]);
 
+  // dopóki wszystkie dane nie są pobrane z serwera to powiadamimay o ładowaniu
   if (!hall || freeTickets.length === 0) {
     return <Loading />;
   }
 
+  // dodanie siedzonka do wybranych siedzień
   const addToSelectedSits = id => {
     setSetelectedSits(prevState => [...prevState, id]);
   };
 
+  // usunięcie siedzonka z wybranych siedzeń
   const rmFromSelectedSits = id => {
     const newSits = selectedSits.filter(item => item !== id);
     setSetelectedSits(newSits);
   };
 
+  // kupienie biletu i przejście do ekranu końcowego
   const buyTickets = async () => {
     for (id of selectedSits) {
       await buyTicket(id);
@@ -59,7 +68,9 @@ const ChoosePlaceScreen = ({route, navigation}) => {
     navigation.navigate('PaymentSuccess');
   };
 
+  // wygenerowanie obiektu siedzonek
   const generateSitsView = () => {
+    // max sala 8x8
     const columns = Math.min(hall.columns, 8);
     const rows = Math.min(hall.rows, 8);
 
@@ -68,6 +79,9 @@ const ChoosePlaceScreen = ({route, navigation}) => {
     const board = [];
     let freeSitId = 0;
 
+    // iterujemy po wszystkich numerach siedzeń
+    // jeśli to siedzenie jest wolne to dajemy je jako szare
+    // jeśli zarezerwowane to jako czerwone
     for (let i = 0; i < sitsNumber; i++) {
       const freeTicket = freeTickets[freeSitId];
       if (freeTicket.seat_number - 1 === i) {
@@ -92,6 +106,7 @@ const ChoosePlaceScreen = ({route, navigation}) => {
           />,
         );
       }
+      // stworzenie nowego rzędu siedzeń jeśli już mamy maksa w aktualnym rzędzie
       if ((i + 1) % rows === 0) {
         board.push(
           <View
@@ -104,24 +119,10 @@ const ChoosePlaceScreen = ({route, navigation}) => {
       }
     }
 
-    // for (let i = 0; i < sitsNumber; i++) {
-    //   const color = freeSits.includes(i + 1) ? COLORS.grey : COLORS.red;
-    //   sits.push(<Sit key={i} color={color} size={30} />);
-    //   if ((i + 1) % rows === 0) {
-    //     board.push(
-    //       <View
-    //         key={i + 1 / rows}
-    //         style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-    //         {sits}
-    //       </View>,
-    //     );
-    //     sits = [];
-    //   }
-    // }
-
     return <View style={styles.board}>{board}</View>;
   };
 
+  // stowrzenie trzech siedzonek jako legenda
   const generateLegend = () => {
     const items = [];
     items.push(<Sit key={1} color={COLORS.yellow} size={50} text="Wybrane" />);
@@ -133,13 +134,10 @@ const ChoosePlaceScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      {console.log(screening)}
-      {console.log(hall)}
       <Text style={styles.header}>Wybierz miejsce</Text>
       {generateSitsView()}
       {generateLegend()}
-
-
+      {console.log(screening)}
       <View style={styles.modalView}>
         <Text style={styles.title}>
           {screening.movie_name.replace(/\(.*\)/, '')}

@@ -16,13 +16,10 @@ import {Context as MovieContext} from '../context/MovieContext';
 import MovieDate from '../components/MovieDate';
 import Loading from '../components/Loading';
 
+// gruopwanie otrzymanych dat
+// klucz to dzień
+// wartość to lista godzin odegrania seansu w danym dniu
 const createGroupedDatesList = screenings => {
-  // const tempDates = [...dates];
-  // for (let i = 0; i < tempDates.length; i++) {
-  //   const newDate = new Date();
-  //   newDate.setTime(Date.parse(tempDates[i]));
-  //   tempDates[i] = newDate;
-  // }
   let dateArray = screenings[0].date.split(' ');
   let day = dateArray[0].replace(/\d{4}\//g, '');
   let hours = [{hour: dateArray[1], screeningId: screenings[0].id}];
@@ -44,19 +41,18 @@ const createGroupedDatesList = screenings => {
       hours = [{hour: dateArray[1], screeningId: screenings[i].id}];
     }
   }
-  console.log('====================================');
-  console.log(result);
-  console.log('====================================');
   return result;
 };
 
+// ekran wyświetlający godziny i dni konkretnego seansu
 const MovieDisplayDatesScreen = ({route, navigation}) => {
   const item = route.params?.item ?? null;
   const {width, height} = Dimensions.get('window');
-  const {state, getScreenings} = useContext(MovieContext);
+  const {state, getScreenings, clearData} = useContext(MovieContext);
 
   const [screenings, setScreenings] = useState([]);
 
+  // pobranie godzin odegrania seansu z serwera
   useEffect(() => {
     const fetchData = async () => {
       getScreenings(item.id);
