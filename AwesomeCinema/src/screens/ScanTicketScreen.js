@@ -14,6 +14,7 @@ import {Context as MovieContext} from '../context/MovieContext';
 
 import * as Constants from '../constants';
 
+// ekran umożliwiający zeksanowanie skanerem biletu przez pracownika
 const ScanTicketScreen = ({params}) => {
   const authCtx = useContext(AuthContext);
   const {state, scanTicket, clearScannedTicket} = useContext(MovieContext);
@@ -25,15 +26,11 @@ const ScanTicketScreen = ({params}) => {
 
   useEffect(() => {
     if (state.scannedTicket) setIsModal(true);
-    console.log('siema');
-    console.log(isModal);
   }, [state.scannedTicket]);
 
   const handleScanCode = data => {
     try {
-      console.log(data);
       setScannedText('');
-      console.log(typeof data);
       data = JSON.parse(data);
       scanTicket(data.ticket_id, data.hash);
     } catch (e) {

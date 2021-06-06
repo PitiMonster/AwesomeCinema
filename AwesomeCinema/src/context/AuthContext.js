@@ -3,7 +3,6 @@ import createDataContext from './createDataContext';
 import {navigate} from '../helpers/navigationRef';
 
 import {BASE_URL} from '../constants';
-import axios from 'axios';
 
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
@@ -11,10 +10,7 @@ const ERROR = 'ERROR';
 const LOADING = 'LOADING';
 
 // reducer, który obsługuje akcje związane z autoryzacją użytkownika
-// state = { token, errMsg }
-// token - token autoryzujący użytkownika
-// username - nazwa użytkownika zwrócona przez server
-// errMsg - zawiera treść błędu w razie jego wystąpienia
+// przetrzyuje on aktualne dane tego contextu
 const authReducer = (state, action) => {
   switch (action.type) {
     case LOGIN:
@@ -34,21 +30,6 @@ const authReducer = (state, action) => {
   }
 };
 
-// próba automatycznego logowania
-// jeśli token istnieje w urządzeniu i jest on aktualny nastąpi zalogowanie
-// w p.p. nastąpi przekierowanie do ekranu logowania
-const tryLocalLogin = dispatch => async () => {
-  const token = await AsyncStorage.getItem('token');
-  const username = await AsyncStorage.getItem('username');
-  if (token) {
-    dispatch({type: LOGIN, payload: {token, username}});
-    navigate('MovieList');
-  } else {
-    navigate('Auth');
-  }
-};
-
-// obsługa logowania danymi 'username' oraz 'password'
 const login = dispatch => async (username, password) => {
   dispatch({type: LOADING, payload: {loading: true}});
   await fetch(`${BASE_URL}/auth/login/`, {
@@ -60,9 +41,6 @@ const login = dispatch => async (username, password) => {
   })
     .then(response => response.json())
     .then(async response => {
-      console.log('====================================');
-      console.log(response);
-      console.log('====================================');
       const token = response.key;
       // // zapisanie 'token' oraz 'username' w pamięci urządzenia
       // // aby umożliwić automatyczne logowanie
@@ -82,7 +60,6 @@ const login = dispatch => async (username, password) => {
     });
   dispatch({type: LOADING, payload: {loading: false}});
 };
-// obsługa logowania danymi 'username' oraz 'password'
 const register = dispatch => async (email, password1, password2) => {
   dispatch({type: LOADING, payload: {loading: true}});
   await fetch(`${BASE_URL}/auth/register/`, {
@@ -140,6 +117,6 @@ const isStaff = async () => {
 // stworzenie i eksport Provider i Context dające dostęp do powyższych funkcji i danych
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {tryLocalLogin, login, logout, register},
+  {login, logout, register},
   {token: null, username: '', errMsg: '', loading: false},
 );

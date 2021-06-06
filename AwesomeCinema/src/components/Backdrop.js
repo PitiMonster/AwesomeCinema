@@ -6,6 +6,11 @@ const {width, height} = Dimensions.get('window');
 const ITEM_SIZE = width * 0.72;
 const BACKDROP_HEIGHT = height * 0.6;
 
+/**
+ * komponent wyświetlający listę obrazków za elementem listy - filmu
+ * @param {*} movies - lista filmów
+ * @param {*} scrollX - zmienna animacji
+ */
 const Backdrop = ({movies, scrollX}) => {
   return (
     <View style={{height: BACKDROP_HEIGHT, width, position: 'absolute'}}>

@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import createDataContext from './createDataContext';
-import myapi from '../api/myapi';
 import {navigate} from '../helpers/navigationRef';
 
 import {BASE_URL} from '../constants';
@@ -47,6 +46,7 @@ const movieReducer = (state, action) => {
   }
 };
 
+// pobranie listy filmów z serwera
 const getMovies = dispatch => async () => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/movies`, {
@@ -69,6 +69,7 @@ const getMovies = dispatch => async () => {
     });
 };
 
+// pobranie listy seansów i ich godzin na konkretny film
 const getScreenings = dispatch => async movieId => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/screenings/?movie_id=${movieId}`, {
@@ -91,6 +92,7 @@ const getScreenings = dispatch => async movieId => {
     });
 };
 
+// pobranie szczegółowych danych o seansie (np. id sali)
 const getScreening = dispatch => async screeningId => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/screenings/${screeningId}`, {
@@ -113,6 +115,7 @@ const getScreening = dispatch => async screeningId => {
     });
 };
 
+// pobranie wszystkich danych o sali
 const getHall = dispatch => async hallId => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/halls/${hallId}`, {
@@ -135,6 +138,7 @@ const getHall = dispatch => async hallId => {
     });
 };
 
+// pobranie listy wolnych biletów na konkretny seans
 const getFreeTickets = dispatch => async screeningId => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/tickets/${screeningId}`, {
@@ -157,6 +161,7 @@ const getFreeTickets = dispatch => async screeningId => {
     });
 };
 
+// zarezerowanie biletu
 const buyTicket = dispatch => async ticket_id => {
   const token = await AsyncStorage.getItem('token');
   await fetch(`${BASE_URL}/cinema/tickets/buy/`, {
@@ -183,6 +188,7 @@ const buyTicket = dispatch => async ticket_id => {
     });
 };
 
+// zeskanowanie biletu przez pracownika
 const scanTicket = dispatch => async (ticket_id, hash) => {
   console.log('jestem tu');
   const token = await AsyncStorage.getItem('token');
@@ -210,15 +216,19 @@ const scanTicket = dispatch => async (ticket_id, hash) => {
     });
 };
 
+// czyszczenie danych o zeksanowanym bilecie, aby gdy zeskanujemy ten sam bilet ponownie useEffect w ScanTicketScreen i tak się wywołał
+// wywołuje się jeśli zmienna na którą nasłuchuje zmienia wartość
+// dane biletu były by takie same gdyby zmienne nie zostały wyczyszczone i modal by się nie pokazał
 const clearScannedTicket = dispatch => () => {
   dispatch({type: CLEAR_TICKET});
 };
 
+// czysczenie wszystkich danych
 const clearData = dispatch => () => {
   dispatch({type: CLEAR});
-  console.log('czyszcze');
 };
 
+// przkeirowanie do listy filmów
 const toMovieList = dispatch => () => {
   dispatch({type: CLEAR});
   navigate('MovieList');

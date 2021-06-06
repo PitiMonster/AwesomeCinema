@@ -6,26 +6,26 @@ import {Context as AuthContext} from '../context/AuthContext';
 
 import LoadingIndicator from '../components/LoadingIndicator';
 
+// ekran wyświetlany użytkonwikowi gdy się autoryzuje
 const AuthScreen = () => {
   const [authType, setAuthType] = useState('sign-in');
   const {register, login, state} = useContext(AuthContext);
 
+  // funkcja wywołana przy logowaniu
   const signIn = async (email, password) => {
     // send data to API
-    console.log('sign in');
-    console.log(email, password);
     await login(email, password, email);
     // navigation.navigate('MovieList');
   };
 
+  // funkcja wywołana przy rejestracji
   const signUp = async (email, password, password2) => {
     // send data to API
-    console.log('sign up');
-    console.log(email, password, password2);
     await register(email, password, password2, email);
     setAuthType('sign-in');
   };
 
+  // formularz do logowania
   const signInForm = (
     <AuthForm
       headerText={'Hi Cinema Lover!'}
@@ -35,6 +35,8 @@ const AuthScreen = () => {
       onButtonPress={(username, password) => signIn(username, password)}
     />
   );
+
+  //formularz do rejestracji
   const signUpForm = (
     <AuthForm
       headerText={'Join us!'}
@@ -47,6 +49,7 @@ const AuthScreen = () => {
     />
   );
 
+  // w zależności od tego jaki jest stan zmiennej authType wyświetlamy różne formularze
   return (
     <View style={styles.container}>
       {state.loading && <LoadingIndicator />}

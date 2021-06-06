@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 
+// komponent formularza autoryzacji
+// dostowuje się do rejestracji i logowania w zależności od parametrów
 const AuthForm = ({
   headerText,
   type,
@@ -21,7 +23,9 @@ const AuthForm = ({
   const [password2, setPassword2] = useState('');
 
   return (
-    <ScrollView style={{flex: 1, width: '100%'}} contentContainerStyle={{alignItems: 'center'}}>
+    <ScrollView
+      style={{flex: 1, width: '100%'}}
+      contentContainerStyle={{alignItems: 'center'}}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>

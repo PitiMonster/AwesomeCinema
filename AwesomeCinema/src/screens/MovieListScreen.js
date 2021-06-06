@@ -27,6 +27,7 @@ const SPACING = 10;
 const ITEM_SIZE = width * 0.72;
 const SPACER_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 
+// wyświetlenie listy filmów
 const MovieListScreen = ({navigation}) => {
   const {getMovies, state, clearData} = useContext(MovieContext);
 
@@ -37,17 +38,15 @@ const MovieListScreen = ({navigation}) => {
   const searchBar = useRef(null);
 
   useEffect(() => {
-    console.log('czyszcze dane');
     clearData();
   }, [state.hallData]);
 
   useEffect(() => {
-    console.log('czyszcze eee');
     clearData();
   }, []);
 
+  // pobranie danych o filmach
   useEffect(() => {
-    console.log('czyszcze');
     clearData();
 
     const fetchData = async () => {
@@ -58,6 +57,7 @@ const MovieListScreen = ({navigation}) => {
       fetchData(movies);
     } else {
       const movies = state.movies;
+      // dodanie left-spacer i right-spacer na początek i koniec listy, aby nie dało się przewinąć filmów za bardzo do boku
       setMovies([{id: 'left-spacer'}, ...movies, {id: 'right-spacer'}]);
       setSearchMovies([{id: 'left-spacer'}, ...movies, {id: 'right-spacer'}]);
     }
@@ -67,6 +67,7 @@ const MovieListScreen = ({navigation}) => {
     return <Loading />;
   }
 
+  // obsługa wyszukiwania
   const handleSearchResults = results => {
     const searchList = movies
       .slice(1, -1)
@@ -103,6 +104,7 @@ const MovieListScreen = ({navigation}) => {
             (index - 1) * ITEM_SIZE,
             index * ITEM_SIZE,
           ];
+          // przesunięcie aktualnie wyśrodkowanego elementu w dół o 50 i każdego dalej o 50 w dół bardziej
           const translateY = scrollX.interpolate({
             inputRange,
             outputRange: [100, 50, 100],

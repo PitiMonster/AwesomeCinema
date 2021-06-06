@@ -16,12 +16,10 @@ import Genres from '../components/Genres';
 import Rating from '../components/Rating';
 import { COLORS } from '../constants';
 
+// komponent wyświetlający szczegóły o jednym filmie
 const MovieDetailsScreen = ({route, navigation}) => {
   const item = route.params?.item ?? null;
   const {width, height} = Dimensions.get('window');
-  console.log('====================================');
-  console.log(item.dates);
-  console.log('====================================');
   return (
     <View style={{flex: 1, width: width, height: height}}>
       <ScrollView
